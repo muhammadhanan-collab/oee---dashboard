@@ -10,7 +10,7 @@ st.sidebar.header("Input Production Data")
 
 planned_time = st.sidebar.number_input("Loading time (min)", 1.0)
 downtime = st.sidebar.number_input("Downtime (min)", 0.0)
-ideal_cycle = st.sidebar.number_input("Ideal Cycle Time (min/unit)", 0.0)
+ideal_cycle = st.sidebar.number_input("Ideal Cycle Time (min/kg)", 0.0)
 total_output = st.sidebar.number_input("Total Output (kg)", 0)
 defect_output = st.sidebar.number_input("Defect Output(kg)", 0)
 
@@ -85,4 +85,5 @@ col3.metric("Quality",
 if "oee" in st.session_state:
     col4.metric("OEE", f"{st.session_state.oee:.2%}")
 else:
+
     col4.metric("OEE", "-")
