@@ -4,9 +4,7 @@ import matplotlib.pyplot as plt
 
 st.title("Analisis Kinerja Produksi lini Spinning Continuous PT Indonesia Toray Synthetics Berbasis OEE")
 
-menu = st.sidebar.selectbox("Pilih Menu", 
-                             ["Input & Simulasi OEE", 
-                              "Analisis Data Historis PT ITS Tahun 2025"])
+tab1, tab2 = st.tabs(["📊 Dashboard OEE", "📈 Analisis Historis 2025"])
 
 
 # KALKULATOR OEE
@@ -82,6 +80,7 @@ elif menu == "Analisis Data Historis PT ITS Tahun 2025":
     - Dampak terhadap perusahaan: potensi penurunan output dan profit.
     - Dampak terhadap karyawan: peningkatan lembur dan beban kerja.
         """)
+
 
 
 
