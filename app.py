@@ -57,9 +57,9 @@ elif menu == "Analisis Data Historis PT ITS Tahun 2025":
 
         # Perhitungan OEE dari csv
     df["Availability"] = (df["LoadingTime"] - df["Downtime"]) / df["LoadingTime"]
-        df["Performance"] = (df["Theoryticalcycletime"] * df["ActualOutput"]) / df["OperatingTime"]
-        df["Quality"] = (df["ActualOutput"] - df["Defect"]) / df["ActualOutput"]
-        df["OEE"] = df["Availability"] * df["Performance"] * df["Quality"]
+    df["Performance"] = (df["Theoryticalcycletime"] * df["ActualOutput"]) / df["OperatingTime"]
+    df["Quality"] = (df["ActualOutput"] - df["Defect"]) / df["ActualOutput"]
+    df["OEE"] = df["Availability"] * df["Performance"] * df["Quality"]
 
         st.subheader("Grafik Tren OEE Lini Spinning continuous PT Indonesia Toray Synthetics Tahun 2025")
         plt.figure()
@@ -82,6 +82,7 @@ elif menu == "Analisis Data Historis PT ITS Tahun 2025":
         - Dampak terhadap perusahaan: potensi penurunan output dan profit.
         - Dampak terhadap karyawan: peningkatan lembur dan beban kerja.
         """)
+
 
 
 
