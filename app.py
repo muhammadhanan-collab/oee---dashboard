@@ -4,13 +4,13 @@ import matplotlib.pyplot as plt
 
 st.title("Analisis Kinerja Produksi lini Spinning Continuous PT Indonesia Toray Synthetics Berbasis OEE")
 
-tab1, tab2 = st.tabs(["📊 Dashboard OEE", "📈 Analisis Historis 2025"])
+tab1, tab2 = st.tabs(["📊 Simulasi perhitungan OEE", "📈 Analisis Historis Lini Spinning Continuous PT ITS Tahun 2025"])
 
 
 # KALKULATOR OEE
 
-if menu == "Input & Simulasi OEE":
-    st.header("Simulasi Kondisi Perusahaan")
+with tab1:
+    st.header("Input Data Produksi")
 
     loading_time = st.number_input("Loading Time (menit)", min_value=0.0)
     downtime = st.number_input("Downtime (menit)", min_value=0.0)
@@ -47,8 +47,8 @@ if menu == "Input & Simulasi OEE":
 
 # 2️⃣ ANALISIS DATA HISTORIS
 
-elif menu == "Analisis Data Historis PT ITS Tahun 2025":
-    st.header("Upload Data Historis 2025 (Format CSV)")
+with tab2:
+    st.header("Data Historis Lini Spinning Continuous PT Indonesia Toray Synthetics Tahun 2025")
 
     df = pd.read_csv("DataHistoris2025.csv")
     st.write("Data Historis:", df)
@@ -80,6 +80,7 @@ elif menu == "Analisis Data Historis PT ITS Tahun 2025":
     - Dampak terhadap perusahaan: potensi penurunan output dan profit.
     - Dampak terhadap karyawan: peningkatan lembur dan beban kerja.
         """)
+
 
 
 
