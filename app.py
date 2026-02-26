@@ -51,11 +51,9 @@ if menu == "Input & Simulasi OEE":
 
 elif menu == "Analisis Data Historis PT ITS Tahun 202":
     st.header("Upload Data Historis 2025 (Format CSV)")
-    uploaded_file = st.file_uploader("Upload file CSV", type=["csv"])
 
-    if uploaded_file:
-        df = pd.read_csv(uploaded_file)
-        st.write("Data Historis:", df)
+      df = pd.read_csv("Data Historis 2025.csv")
+      st.write("Data Historis:", df)
 
         # Hitung OEE jika belum ada
         df["Availability"] = (df["LoadingTime"] - df["Downtime"]) / df["LoadingTime"]
@@ -84,3 +82,4 @@ elif menu == "Analisis Data Historis PT ITS Tahun 202":
         - Dampak terhadap perusahaan: potensi penurunan output dan profit.
         - Dampak terhadap karyawan: peningkatan lembur dan beban kerja.
         """)
+
