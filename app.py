@@ -55,8 +55,8 @@ elif menu == "Analisis Data Historis PT ITS Tahun 2025":
     df = pd.read_csv("DataHistoris2025.csv")
     st.write("Data Historis:", df)
 
-        # Hitung OEE jika belum ada
-        df["Availability"] = (df["LoadingTime"] - df["Downtime"]) / df["LoadingTime"]
+        # Perhitungan OEE dari csv
+    df["Availability"] = (df["LoadingTime"] - df["Downtime"]) / df["LoadingTime"]
         df["Performance"] = (df["Theoryticalcycletime"] * df["ActualOutput"]) / df["OperatingTime"]
         df["Quality"] = (df["ActualOutput"] - df["Defect"]) / df["ActualOutput"]
         df["OEE"] = df["Availability"] * df["Performance"] * df["Quality"]
@@ -82,6 +82,7 @@ elif menu == "Analisis Data Historis PT ITS Tahun 2025":
         - Dampak terhadap perusahaan: potensi penurunan output dan profit.
         - Dampak terhadap karyawan: peningkatan lembur dan beban kerja.
         """)
+
 
 
 
