@@ -61,27 +61,28 @@ elif menu == "Analisis Data Historis PT ITS Tahun 2025":
     df["Quality"] = (df["ActualOutput"] - df["Defect"]) / df["ActualOutput"]
     df["OEE"] = df["Availability"] * df["Performance"] * df["Quality"]
 
-        st.subheader("Grafik Tren OEE Lini Spinning continuous PT Indonesia Toray Synthetics Tahun 2025")
-        plt.figure()
-        plt.plot(df["Bulan"], df["OEE"])
-        plt.xlabel("Bulan")
-        plt.ylabel("OEE")
-        st.pyplot(plt)
+    st.subheader("Grafik Tren OEE Lini Spinning continuous PT Indonesia Toray Synthetics Tahun 2025")
+    plt.figure()
+    plt.plot(df["Bulan"], df["OEE"])
+    plt.xlabel("Bulan")
+    plt.ylabel("OEE")
+    st.pyplot(plt)
 
-        st.subheader("Analisis Bulan Tertinggi & Terendah")
-        max_month = df.loc[df["OEE"].idxmax()]
-        min_month = df.loc[df["OEE"].idxmin()]
+    st.subheader("Analisis Bulan Tertinggi & Terendah")
+    max_month = df.loc[df["OEE"].idxmax()]
+    min_month = df.loc[df["OEE"].idxmin()]
 
-        st.write(f"Bulan Tertinggi: {max_month['Bulan']} ({max_month['OEE']:.2%})")
-        st.write(f"Bulan Terendah: {min_month['Bulan']} ({min_month['OEE']:.2%})")
+    st.write(f"Bulan Tertinggi: {max_month['Bulan']} ({max_month['OEE']:.2%})")
+    st.write(f"Bulan Terendah: {min_month['Bulan']} ({min_month['OEE']:.2%})")
 
-        st.subheader("Dampak Nilai OEE terhadap perusahaan")
+    st.subheader("Dampak Nilai OEE terhadap perusahaan")
 
-        st.write("""
-        - Bulan dengan OEE rendah yaitu pada bulan Oktober menunjukkan downtime yang sangat tinggi akibat penyesuaian after shutdown machine selama 1 bulan penuh di bulan september.
-        - Dampak terhadap perusahaan: potensi penurunan output dan profit.
-        - Dampak terhadap karyawan: peningkatan lembur dan beban kerja.
+    st.write("""
+    - Bulan dengan OEE rendah yaitu pada bulan Oktober menunjukkan downtime yang sangat tinggi akibat penyesuaian after shutdown machine selama 1 bulan penuh di bulan september.
+    - Dampak terhadap perusahaan: potensi penurunan output dan profit.
+    - Dampak terhadap karyawan: peningkatan lembur dan beban kerja.
         """)
+
 
 
 
