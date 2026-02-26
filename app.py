@@ -1,89 +1,86 @@
 import streamlit as st
 import pandas as pd
-import plotly.express as px
+import matplotlib.pyplot as plt
 
-st.set_page_config(page_title="OEE Dashboard", layout="wide")
+st.title("Analisis Kinerja Produksi lini Spinning Continuous PT Indonesia Toray Synthetics Berbasis OEE")
 
-st.title("📊 OEE Monitoring Dashboard")
-
-st.sidebar.header("Input Production Data")
-
-planned_time = st.sidebar.number_input("Loading time (min)", 1.0)
-downtime = st.sidebar.number_input("Downtime (min)", 0.0)
-ideal_cycle = st.sidebar.number_input("Ideal Cycle Time (min/kg)", 0.0)
-total_output = st.sidebar.number_input("Total Output (kg)", 0)
-defect_output = st.sidebar.number_input("Defect Output(kg)", 0)
-
-# Initialize session state
-if "availability" not in st.session_state:
-    st.session_state.availability = None
-if "performance" not in st.session_state:
-    st.session_state.performance = None
-if "quality" not in st.session_state:
-    st.session_state.quality = None
+menu = st.sidebar.selectbox("Pilih Menu", 
+                             ["Input & Simulasi OEE", 
+                              "Analisis Data Historis PT ITS Tahun 2025"])
 
 
-st.subheader("Calculate Components")
+# KALKULATOR OEE
 
-colA, colP, colQ, colO = st.columns(4)
+if menu == "Input & Simulasi OEE":
+    st.header("Simulasi Kondisi Perusahaan")
 
-# AVAILABILITY BUTTON
-if colA.button("Calculate Availability"):
-    operating_time = planned_time - downtime
-    st.session_state.availability = (
-        operating_time / planned_time if planned_time > 0 else 0
-    )
+    loading_time = st.number_input("Loading Time (menit)", min_value=0.0)
+    downtime = st.number_input("Downtime (menit)", min_value=0.0)
+    ideal_output = st.number_input("Output Ideal", min_value=0.0)
+    actual_output = st.number_input("Output Aktual", min_value=0.0)
+    defect = st.number_input("Jumlah Defect", min_value=0.0)
 
-# PERFORMANCE BUTTON
-if colP.button("Calculate Performance"):
-    operating_time = planned_time - downtime
-    st.session_state.performance = (
-        (ideal_cycle * total_output) / operating_time
-        if operating_time > 0 else 0
-    )
+    if st.button("Hitung OEE"):
+        if loading_time > 0 and actual_output > 0:
+            availability = (loading_time - downtime) / loading_time
+            performance = actual_output / ideal_output if ideal_output > 0 else 0
+            quality = (actual_output - defect) / actual_output
 
-# QUALITY BUTTON
-if colQ.button("Calculate Quality"):
-    good_output = total_output - defect_output
-    st.session_state.quality = (
-        good_output / total_output if total_output > 0 else 0
-    )
+            oee = availability * performance * quality
 
-# OEE BUTTON
-if colO.button("Calculate OEE"):
-    if (
-        st.session_state.availability is not None and
-        st.session_state.performance is not None and
-        st.session_state.quality is not None
-    ):
-        st.session_state.oee = (
-            st.session_state.availability *
-            st.session_state.performance *
-            st.session_state.quality
-        )
-    else:
-        st.warning("Calculate A, P, and Q first!")
+            st.subheader("Hasil Perhitungan OEE")
+            st.write(f"Availability: {availability:.2%}")
+            st.write(f"Performance: {performance:.2%}")
+            st.write(f"Quality: {quality:.2%}")
+            st.write(f"OEE: {oee:.2%}")
+
+            # Interpretasi otomatis
+            st.subheader("Interpretasi Kondisi Perusahaan")
+
+            if oee < 0.6:
+                st.error("Kondisi KRITIS - Perlu perbaikan menyeluruh pada sistem produksi.")
+            elif oee < 0.75:
+                st.warning("Kondisi CUKUP - Sudah cukup baik namun perlu banyak peningkatan agar menjadi lebih baik.")
+            elif oee < 0.85:
+                st.info("Kondisi BAIK - Operasi relatif stabil dan sudah memenuhi standard internasional.")
+            else:
+                st.success("WORLD CLASS - Kinerja sudah sangat optimal.")
 
 
-# DISPLAY RESULTS
-st.subheader("Results")
+# 2️⃣ ANALISIS DATA HISTORIS
 
-col1, col2, col3, col4 = st.columns(4)
+elif menu == "Analisis Data Historis PT ITS Tahun 202":
+    st.header("Upload Data Historis 2025 (Format CSV)")
+    uploaded_file = st.file_uploader("Upload file CSV", type=["csv"])
 
-col1.metric("Availability", 
-            f"{st.session_state.availability:.2%}" 
-            if st.session_state.availability is not None else "-")
+    if uploaded_file:
+        df = pd.read_csv(uploaded_file)
+        st.write("Data Historis:", df)
 
-col2.metric("Performance", 
-            f"{st.session_state.performance:.2%}" 
-            if st.session_state.performance is not None else "-")
+        # Hitung OEE jika belum ada
+        df["Availability"] = (df["LoadingTime"] - df["Downtime"]) / df["LoadingTime"]
+        df["Performance"] = (df["Theoryticalcycletime"] * df["ActualOutput"]) / df["OperatingTime"]
+        df["Quality"] = (df["ActualOutput"] - df["Defect"]) / df["ActualOutput"]
+        df["OEE"] = df["Availability"] * df["Performance"] * df["Quality"]
 
-col3.metric("Quality", 
-            f"{st.session_state.quality:.2%}" 
-            if st.session_state.quality is not None else "-")
+        st.subheader("Grafik Tren OEE Lini Spinning continuous PT Indonesia Toray Synthetics Tahun 2025")
+        plt.figure()
+        plt.plot(df["Bulan"], df["OEE"])
+        plt.xlabel("Bulan")
+        plt.ylabel("OEE")
+        st.pyplot(plt)
 
-if "oee" in st.session_state:
-    col4.metric("OEE", f"{st.session_state.oee:.2%}")
-else:
+        st.subheader("Analisis Bulan Tertinggi & Terendah")
+        max_month = df.loc[df["OEE"].idxmax()]
+        min_month = df.loc[df["OEE"].idxmin()]
 
-    col4.metric("OEE", "-")
+        st.write(f"Bulan Tertinggi: {max_month['Bulan']} ({max_month['OEE']:.2%})")
+        st.write(f"Bulan Terendah: {min_month['Bulan']} ({min_month['OEE']:.2%})")
+
+        st.subheader("Dampak Nilai OEE terhadap perusahaan")
+
+        st.write("""
+        - Bulan dengan OEE rendah yaitu pada bulan Oktober menunjukkan downtime yang sangat tinggi akibat penyesuaian after shutdown machine selama 1 bulan penuh di bulan september.
+        - Dampak terhadap perusahaan: potensi penurunan output dan profit.
+        - Dampak terhadap karyawan: peningkatan lembur dan beban kerja.
+        """)
